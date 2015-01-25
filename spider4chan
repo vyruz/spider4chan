@@ -9,7 +9,7 @@ import urllib
 import os
 
 if len(argv)<2:
-    print "Usage: imgdownload thread_url optional_destination_directory"
+    print "Usage: ./spider4chan thread_url optional_destination_directory"
 else:
     inurl = argv[1]
     directory=""
