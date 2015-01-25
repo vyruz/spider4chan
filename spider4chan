@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+# 4chan image downloader
+# usage ./imgDownload threadurl directory
+
+import re 
+from sys import argv
+import urllib
+import os
+
+if len(argv)<2:
+    print "Usage: imgdownload thread_url optional_destination_directory"
+else:
+    inurl = argv[1]
+    directory=""
+    if len(argv)>2:
+        directory=argv[2]
+        urllib.urlretrieve(inurl, filename="tmpurl")
+        infile = open("tmpurl").read().split(' ')
+        
+        images=[]
+        for i in infile:
+            imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
+            if imgs:
+                for p in imgs:   
+                    imgUrl=re.findall('\w+[.].*[.][a-z]{3}.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
+                    images.append("http://"+imgUrl[0])
+           
+    for url in images:
+        picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
+        image=urllib.URLopener()
+        image.retrieve(url, directory+picname)
+
+    os.remove("tmpurl")
