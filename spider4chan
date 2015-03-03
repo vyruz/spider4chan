@@ -23,9 +23,9 @@ else:
             imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
             if imgs:
                 for p in imgs:   
-                    imgUrl=re.findall('\w+[.].*[.][a-z]{3}.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
+                    imgUrl=re.findall('\w+[.].*[.][a-z]{3}[^s]*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
                     images.append("http://"+imgUrl[0])
-           
+    print "Downloading images....."
     for url in images:
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
         image=urllib.URLopener()
