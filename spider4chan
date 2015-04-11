@@ -15,16 +15,18 @@ else:
     directory=""
     if len(argv)>2:
         directory=argv[2]
-        urllib.urlretrieve(inurl, filename="tmpurl")
-        infile = open("tmpurl").read().split(' ')
+    urllib.urlretrieve(inurl, filename="tmpurl")
+    infile = open("tmpurl").read().split(' ')
         
-        images=[]
-        for i in infile:
-            imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
-            if imgs:
-                for p in imgs:   
-                    imgUrl=re.findall('\w+[.].*[.][a-z]{3}[^s]*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
-                    images.append("http://"+imgUrl[0])
+    images=[]
+    for i in infile:
+        imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
+        if imgs:
+            for p in imgs:   
+                imgUrl=re.findall('\w+[.].*[.][a-z]{3}[^s]*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
+                if imgUrl:
+                    images.append("http://"+imgUrl[0]) 
+
     print "Downloading images....."
     for url in images:
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
