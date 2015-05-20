@@ -4,9 +4,10 @@
 # usage ./imgDownload threadurl directory
 
 import re 
-from sys import argv
+from sys import argv, stdout
 import urllib
 import os
+
 
 if len(argv)<2:
     print "Usage: ./spider4chan thread_url optional_destination_directory"
@@ -27,8 +28,11 @@ else:
                 if imgUrl:
                     images.append("http://"+imgUrl[0]) 
 
-    print "Downloading images....."
+    stdout.write("Downloading images")
+    stdout.flush()
     for url in images:
+        stdout.write(".")
+        stdout.flush()
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
         image=urllib.URLopener()
         image.retrieve(url, directory+picname)
