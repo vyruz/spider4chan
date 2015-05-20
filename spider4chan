@@ -8,6 +8,7 @@ from sys import argv, stdout
 import urllib
 import os
 
+count = 0 #count of images
 
 if len(argv)<2:
     print "Usage: ./spider4chan thread_url optional_destination_directory"
@@ -28,10 +29,11 @@ else:
                 if imgUrl:
                     images.append("http://"+imgUrl[0]) 
 
-    stdout.write("Downloading images")
+    stdout.write("Downloading images:\n")
     stdout.flush()
     for url in images:
-        stdout.write(".")
+        stdout.write("\r" + str(count))
+        count+=1
         stdout.flush()
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
         image=urllib.URLopener()
