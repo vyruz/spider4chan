@@ -17,9 +17,11 @@
     usage ./imgDownload threadurl directory
 """
 import re 
-from sys import argv
+from sys import argv, stdout
 import urllib
 import os
+
+count = 0 #count of images
 
 if len(argv)<2:
     print "Usage: ./spider4chan thread_url optional_destination_directory"
@@ -28,18 +30,24 @@ else:
     directory=""
     if len(argv)>2:
         directory=argv[2]
-        urllib.urlretrieve(inurl, filename="tmpurl")
-        infile = open("tmpurl").read().split(' ')
+    urllib.urlretrieve(inurl, filename="tmpurl")
+    infile = open("tmpurl").read().split(' ')
         
-        images=[]
-        for i in infile:
-            imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
-            if imgs:
-                for p in imgs:   
-                    imgUrl=re.findall('\w+[.].*[.][a-z]{3}[^s]*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
-                    images.append("http://"+imgUrl[0])
-    print "Downloading images....."
+    images=[]
+    for i in infile:
+        imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
+        if imgs:
+            for p in imgs:   
+                imgUrl=re.findall('\w+[.].*[.][a-z]{3}[^s]*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))',p)                    
+                if imgUrl:
+                    images.append("http://"+imgUrl[0]) 
+
+    stdout.write("Downloading images:\n")
+    stdout.flush()
     for url in images:
+        stdout.write("\r" + str(count))
+        count+=1
+        stdout.flush()
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
         image=urllib.URLopener()
         image.retrieve(url, directory+picname)
