@@ -18,21 +18,25 @@
 """
 import re
 from sys import argv, stdout
-import urllib
+import urllib.request
 import os
+import requests
 
 count = 0 #count of images
 
 if len(argv)<2:
-    print "Usage: ./spider4chan thread_url optional_destination_directory"
+    print( "Usage: ./spider4chan thread_url optional_destination_directory")
 else:
     inurl = argv[1]
     directory=""
     if len(argv)>2:
         directory=argv[2]
-    urllib.urlretrieve(inurl, filename="tmpurl")
-    infile = open("tmpurl").read().split(' ')
-
+#    urllib.urlretrieve(inurl, filename="tmpurl")
+    urllib.request.urlretrieve(inurl, filename="tmpurl.html")
+    try:
+        infile = open("tmpurl.html", mode="r", encoding="utf-8").read().split(' ')
+    except:
+        os.remove("tmpurl.html")
     images=[]
     for i in infile:
         imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
@@ -49,7 +53,8 @@ else:
         count+=1
         stdout.flush()
         picname=re.findall("[0-9a-zA-Z]+[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))", url)[0]
-        image=urllib.URLopener()
-        image.retrieve(url, directory+picname)
+        image=requests.get(url)
+        with open(directory+picname, 'wb') as f:
+            f.write(image.content)
     stdout.write("\n")
-    os.remove("tmpurl")
+    os.remove("tmpurl.html")
