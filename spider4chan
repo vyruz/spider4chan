@@ -16,10 +16,7 @@
     4chan image downloader
     usage ./imgDownload threadurl directory
 """
-import re
 from sys import argv, stdout
-import urllib.request
-import os
 import requests
 
 count = 0 #count of images
@@ -31,12 +28,7 @@ else:
     directory=""
     if len(argv)>2:
         directory=argv[2]
-#    urllib.urlretrieve(inurl, filename="tmpurl")
-    urllib.request.urlretrieve(inurl, filename="tmpurl.html")
-    try:
-        infile = open("tmpurl.html", mode="r", encoding="utf-8").read().split(' ')
-    except:
-        os.remove("tmpurl.html")
+    infile = requests.get(inurl).text.split(' ')
     images=[]
     for i in infile:
         imgs = re.findall('i[.]4cdn[.]org.*[.](?:(?:jpg)|(?:png)|(?:jpeg)|(?:gif)|(?:webm))', i)
@@ -57,4 +49,3 @@ else:
         with open(directory+picname, 'wb') as f:
             f.write(image.content)
     stdout.write("\n")
-    os.remove("tmpurl.html")
