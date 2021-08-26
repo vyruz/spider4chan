@@ -18,6 +18,7 @@
 """
 import re
 from sys import argv, stdout
+#import os
 import requests
 
 count = 0 #count of images
